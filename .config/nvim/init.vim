@@ -80,6 +80,10 @@ xnoremap K :move '<-2<CR>gv-gv
 xnoremap J :move '>+1<CR>gv-gv
 
 " Navigation
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
 nnoremap <C-n> :NERDTreeToggle<CR>
 nmap <C-p> :FZF<CR>
 nmap ; :Buffers<CR>
@@ -92,8 +96,8 @@ nnoremap <silent> <leader>O :vertical botright Ttoggle<CR><C-w>l<C-W>J
 nnoremap <silent> <leader><space> :vertical botright Ttoggle<CR><C-w>l
 tnoremap <silent> <leader><space> <C-\><C-n>:Ttoggle<CR>
 
-nnoremap <silent> <C-l>l :TREPLSendLine<CR>
-vnoremap <silent> <C-l>s :TREPLSendSelection<CR>
+nnoremap <silent> <C-t>l :TREPLSendLine<CR>
+vnoremap <silent> <C-t>s :TREPLSendSelection<CR>
 
 " Fast replace
 nnoremap <leader>k :%s/\<<C-r><C-w>\>//gc<Left><Left><Left>

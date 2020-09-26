@@ -53,7 +53,8 @@ plugins=(vi-mode git zsh-autosuggestions zsh-syntax-highlighting)
 alias vim="nvim"
 alias wget="wget --hsts-file ~/.cache/wget/wget-hsts"
 
-source $ZSH/oh-my-zsh.sh
+[[ -f $ZSH/oh-my-zsh.sh ]] && \
+    source $ZSH/oh-my-zsh.sh
 
 ! command -v tmux &> /dev/null && return
 [[ -z $DISPLAY ]] && return
