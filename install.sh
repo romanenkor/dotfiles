@@ -12,8 +12,8 @@ while getopts ":a:r:b:p:h" o; do case "${o}" in
 	*) printf "Invalid option: -%s\\n" "$OPTARG" && usage && exit 1 ;;
 esac done
 
-[ -z "$dotfilesrepo" ] && dotfilesrepo="https://gitlab.com/romanenkor/dotfiles.git"
-[ -z "$progsfile" ] && progsfile="https://gitlab.com/romanenkor/dotfiles/-/raw/master/progs.csv"
+[ -z "$dotfilesrepo" ] && dotfilesrepo="https://github.com/romanenkor/dotfiles.git"
+[ -z "$progsfile" ] && progsfile="https://raw.githubusercontent.com/romanenkor/dotfiles/master/progs.csv"
 [ -z "$aurhelper" ] && aurhelper="yay"
 [ -z "$repobranch" ] && repobranch="master"
 
@@ -57,6 +57,11 @@ manualinstall() { # Installs $1 manually if not installed. Used only for AUR hel
 	cd /tmp || return 1)
 }
 
+newperms() { # Set special sudoers settings for install (or after).
+	sed -i "/#BOOTSCRIPT/d" /etc/sudoers
+	echo "$* #BOOTSCRIPT" >> /etc/sudoers
+}
+
 maininstall() { # Installs all needed programs from main repo.
 	dialog --title "Installation" --infobox "Installing \`$1\` ($n of $total).\\n\\n $1 $2" 5 70
 	installpkg "$1"
@@ -81,7 +86,7 @@ aurinstall() { \
 }
 
 pipinstall() { \
-	dialog --title "LARBS Installation" --infobox "Installing the Python package \`$1\` ($n of $total). $1 $2" 5 70
+	dialog --title "Installation" --infobox "Installing the Python package \`$1\` ($n of $total). $1 $2" 5 70
 	[ -x "$(command -v "pip")" ] || installpkg python-pip >/dev/null 2>&1
 	yes | pip install "$1"
 }
@@ -149,6 +154,8 @@ ntpdate 0.us.pool.ntp.org >/dev/null 2>&1
 
 [ -f /etc/sudoers.pacnew ] && cp /etc/sudoers.pacnew /etc/sudoers # Just in case
 
+newperms "%wheel ALL=(ALL) NOPASSWD: ALL"
+
 # Make pacman and yay colorful and adds eye candy on the progress bar because why not.
 grep -q "^Color" /etc/pacman.conf || sed -i "s/^#Color$/Color/" /etc/pacman.conf
 grep -q "ILoveCandy" /etc/pacman.conf || sed -i "/#VerbosePkgLists/a ILoveCandy" /etc/pacman.conf
@@ -180,12 +187,16 @@ killall pulseaudio; sudo -u "$name" pulseaudio --start
 systemctl enable fstrim.timer
 systemctl enable NetworkManager
 systemctl enable sddm
+nvidia-xconfig
 
 balooctl disable
 balooctl clear
 balooctl purge
 pacman --noconfirm --needed -Rc baloo
 mkdir ~/.compose-cache
+
+newperms "%wheel ALL=(ALL) ALL #BOOTSCRIPT
+%wheel ALL=(ALL) NOPASSWD: /usr/bin/shutdown,/usr/bin/reboot,/usr/bin/systemctl suspend,/usr/bin/wifi-menu,/usr/bin/mount,/usr/bin/umount,/usr/bin/pacman -Syu,/usr/bin/pacman -Syyu,/usr/bin/packer -Syu,/usr/bin/packer -Syyu,/usr/bin/systemctl restart NetworkManager,/usr/bin/rc-service NetworkManager restart,/usr/bin/pacman -Syyu --noconfirm,/usr/bin/loadkeys,/usr/bin/yay,/usr/bin/pacman -Syyuw --noconfirm"
 
 # Last message! Install complete!
 finalize
