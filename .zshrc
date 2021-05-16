@@ -48,7 +48,7 @@ if [[ ! -d $ZSH_CACHE_DIR ]]; then
   mkdir -p $ZSH_CACHE_DIR
 fi
 
-plugins=(vi-mode git zsh-autosuggestions zsh-syntax-highlighting)
+plugins=(vi-mode git zsh-autosuggestions zsh-fast-syntax-highlighting)
 
 alias vim="nvim"
 alias wget="wget --hsts-file ~/.cache/wget/wget-hsts"
