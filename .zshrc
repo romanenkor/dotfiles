@@ -23,9 +23,7 @@ export PATH="$PATH:$HOME/.local/bin/"
 export EDITOR="nvim"
 export BROWSER="firefox"
 export LESSHISTFILE="$HOME/.cache/less/history"
-# export TERMINAL="st"
-# export FILE="lf"
-# export READER="zathura"
+ export READER="okular"
 
 # Configure FZF
 export FZF_DEFAULT_COMMAND='ag --nocolor -g ""'
@@ -52,6 +50,21 @@ plugins=(vi-mode git zsh-autosuggestions zsh-fast-syntax-highlighting)
 
 alias vim="nvim"
 alias wget="wget --hsts-file ~/.cache/wget/wget-hsts"
+
+gsync() { \
+    (git config advice.addEmbeddedRepo false                                          
+                                                                                     
+    export GIT_DIR=$PWD/.git                                                         
+    export GIT_WORK_TREE=$HOME                                                       
+                                                                                     
+    [ -d "$HOME/.config/nvim" ] && git add $HOME/.config/nvim                        
+    [ -d "$HOME/.config/tmux" ] && git add $HOME/.config/tmux                        
+    [ -d "$HOME/.config/tmux" ] && git add $HOME/.tmux.conf                          
+    [ -f "$HOME/.zshrc" ] && git add $HOME/.zshrc                                    
+                                                                                     
+    git commit                                                                       
+    git push -u origin master)
+}
 
 [[ -f $ZSH/oh-my-zsh.sh ]] && \
     source $ZSH/oh-my-zsh.sh
