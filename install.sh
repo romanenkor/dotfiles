@@ -189,6 +189,8 @@ systemctl enable NetworkManager
 systemctl enable sddm
 nvidia-xconfig
 
+sed -i'' '/DefaultTimeoutStopSec=/c DefaultTimeoutStopSec=1s' /etc/systemd/system.conf
+kwriteconfig5 --file kdesurc --group super-user-command --key super-user-command sudo
 balooctl disable
 balooctl clear
 balooctl purge
