@@ -157,6 +157,7 @@ ntpdate 0.us.pool.ntp.org >/dev/null 2>&1
 newperms "%wheel ALL=(ALL) NOPASSWD: ALL"
 
 # Make pacman and yay colorful and adds eye candy on the progress bar because why not.
+sed -i '/Download/a ParallelDownloads = 5' /etc/pacman.conf
 grep -q "^Color" /etc/pacman.conf || sed -i "s/^#Color$/Color/" /etc/pacman.conf
 grep -q "ILoveCandy" /etc/pacman.conf || sed -i "/#VerbosePkgLists/a ILoveCandy" /etc/pacman.conf
 
